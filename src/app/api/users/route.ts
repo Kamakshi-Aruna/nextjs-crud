@@ -25,3 +25,18 @@ export async function GET() {
         return NextResponse.json({ message: "Error fetching users", error }, { status: 500 });
     }
 }
+
+// UPDATE
+export async function PUT(req: Request) {
+    try {
+        await connectMongo();
+        const { id, name, email } = await req.json();
+        const updatedUser = await User.findByIdAndUpdate(id, { name, email }, { new: true });
+        if (!updatedUser) {
+            return NextResponse.json({ message: "User not found" }, { status: 404 });
+        }
+        return NextResponse.json({ message: "User updated", user: updatedUser }, { status: 200 });
+    } catch (error) {
+        return NextResponse.json({ message: "Error updating user", error }, { status: 500 });
+    }
+}
