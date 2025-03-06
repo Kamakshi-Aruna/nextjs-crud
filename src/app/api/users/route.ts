@@ -14,3 +14,14 @@ export async function POST(req: Request) {
         return NextResponse.json({ message: "Error creating user", error }, { status: 500 });
     }
 }
+
+//  READ
+export async function GET() {
+    try {
+        await connectMongo();
+        const users = await User.find();
+        return NextResponse.json({ users }, { status: 200 });
+    } catch (error) {
+        return NextResponse.json({ message: "Error fetching users", error }, { status: 500 });
+    }
+}
