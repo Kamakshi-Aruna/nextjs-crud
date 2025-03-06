@@ -40,3 +40,18 @@ export async function PUT(req: Request) {
         return NextResponse.json({ message: "Error updating user", error }, { status: 500 });
     }
 }
+
+//  DELETE
+export async function DELETE(req: Request) {
+    try {
+        await connectMongo();
+        const { id } = await req.json();
+        const deletedUser = await User.findByIdAndDelete(id);
+        if (!deletedUser) {
+            return NextResponse.json({ message: "User not found" }, { status: 404 });
+        }
+        return NextResponse.json({ message: "User deleted" }, { status: 200 });
+    } catch (error) {
+        return NextResponse.json({ message: "Error deleting user", error }, { status: 500 });
+    }
+}
